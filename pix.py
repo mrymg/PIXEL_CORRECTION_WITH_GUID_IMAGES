@@ -26,13 +26,20 @@ def get_pixel(image, i, j):
 
 
 # Create a Grayscale version of the image
+def nearest_colour( subjects, query ):
+    return min( subjects, key = lambda subject: sum( (s - q) ** 2 for s, q in zip( subject, query ) ) )
 
+colours = ( (255, 255, 255, "white"),
+            (255, 0, 0, "red"),
+            (0, 0, 255, "blue"),
+            (0, 255, 0, "green"),
+            (255, 0 ,255, "fuscia"))
 
 rgbArr = [(255,0,0),(0,255,0), (0,0,255), (255,255,255), (255,0,255)]
 clrset=set()
 src = "C:\\Users\\ymgoz\\Desktop\\assigned-to-yunus2\\masksc\\"
 dst = "C:\\Users\\ymgoz\\Desktop\\assigned-to-yunus2\\corrected\\"
-
+allcount = 0
 for filename in os.listdir(src):
     img = open_image(src+filename)
     w, h = img.size
@@ -51,47 +58,53 @@ for filename in os.listdir(src):
                 # print(mcolor)
                 clrset.add(mcolor)
                 count += 1
-                # r = 0
-                # g= 0
-                # b = 0
-                # mcolor = (r,g,b)
-                if mcolor[0] > 125 and mcolor[1] < 125 and mcolor[2] < 125:
-                    r = 255
-                    g = 0
-                    b = 0
-                    mcolor = (r, g, b)
-                elif mcolor[0] < 125 and mcolor[1] > 125 and mcolor[2] < 125:
-                    r = 0
-                    g = 255
-                    b = 0
-                    mcolor = (r, g, b)
-                elif mcolor[0] < 125 and mcolor[1] < 125 and mcolor[2] > 125:
-                    r = 0
-                    g = 0
-                    b = 255
-                    mcolor = (r, g, b)
-                elif mcolor[0] > 125 and mcolor[1] < 125 and mcolor[2] > 125:
-                    r = 255
-                    g = 0
-                    b = 255
-                    mcolor = (r, g, b)
-                elif mcolor[0] > 200 and mcolor[1] > 200 and mcolor[2] > 200:
-                    r = 255
-                    g = 255
-                    b = 255
-                    mcolor = (r, g, b)
-                else:
-                    r = 255
-                    g = 255
-                    b = 255
-                    mcolor = (r, g, b)
+                allcount +=1
+                # print(mcolor, nearest_colour(colours, mcolor))
+                corrected_color = nearest_colour(colours, mcolor)
+                mcolor = (corrected_color[0], corrected_color[1], corrected_color[2])
+                # # r = 0
+                # # g= 0
+                # # b = 0
+                # # mcolor = (r,g,b)
+                # if mcolor[0] > 125 and mcolor[1] < 125 and mcolor[2] < 125:
+                #     r = 255
+                #     g = 0
+                #     b = 0
+                #     mcolor = (r, g, b)
+                # elif mcolor[0] < 125 and mcolor[1] > 125 and mcolor[2] < 125:
+                #     r = 0
+                #     g = 255
+                #     b = 0
+                #     mcolor = (r, g, b)
+                # elif mcolor[0] < 125 and mcolor[1] < 125 and mcolor[2] > 125:
+                #     r = 0
+                #     g = 0
+                #     b = 255
+                #     mcolor = (r, g, b)
+                # elif mcolor[0] > 125 and mcolor[1] < 125 and mcolor[2] > 125:
+                #     r = 255
+                #     g = 0
+                #     b = 255
+                #     mcolor = (r, g, b)
+                # elif mcolor[0] > 200 and mcolor[1] > 200 and mcolor[2] > 200:
+                #     r = 255
+                #     g = 255
+                #     b = 255
+                #     mcolor = (r, g, b)
+                # else:
+                #     r = 255
+                #     g = 255
+                #     b = 255
+                #     mcolor = (r, g, b)
 
             newpix[i, j] = (int(mcolor[0]), int(mcolor[1]), int(mcolor[2]))
 
     save_image(newImg, dst+filename)
 
-# color distance
 
-# print(count)
+
+
+
+# print(allcount)
 # print(clrset)
 
