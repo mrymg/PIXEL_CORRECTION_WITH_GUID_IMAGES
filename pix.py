@@ -1,4 +1,5 @@
 from PIL import Image
+import os
 
 # Open an Image
 def open_image(path):
@@ -25,59 +26,71 @@ def get_pixel(image, i, j):
 
 
 # Create a Grayscale version of the image
-filem = open('rr.txt', 'w')
 
 
-# def gp(image):
-#     # Get size
-#     width, height = image.size
-#
-#     # Create new Image and a Pixel Map
-#     new = create_image(width, height)
-#     pixels = new.load()
-#     # Transform to grayscale
-#     for i in range(width):
-#         for j in range(height):
-#             # Get Pixel
-#             pixel = get_pixel(image, i, j)
-#
-#             # Get R, G, B values (This are int from 0 to 255)
-#             red = pixel[0]
-#             green = pixel[1]
-#             blue = pixel[2]
-#
-#             filem.write(str(i) + ' ' + str(j) + '\n')
-#
-#             # # Transform to grayscale
-#             gray = (red * 0.299) + (green * 0.587) + (blue * 0.114)
-#
-#             # Set Pixel in new image
-#             pixels[i, j] = (int(gray), int(gray), int(gray))
-#
-#         # Return new image
-#         return new
 rgbArr = [(255,0,0),(0,255,0), (0,0,255), (255,255,255), (255,0,255)]
 clrset=set()
+src = "C:\\Users\\ymgoz\\Desktop\\assigned-to-yunus2\\masksc\\"
+dst = "C:\\Users\\ymgoz\\Desktop\\assigned-to-yunus2\\corrected\\"
+
+for filename in os.listdir(src):
+    img = open_image(src+filename)
+    w, h = img.size
+    count = 0
+    newImg = create_image(w, h)
+    newpix = newImg.load()
+
+    for i in range(w):
+        for j in range(h):
+            mpixel = get_pixel(img, i, j)
+            red = mpixel[0]
+            green = mpixel[1]
+            blue = mpixel[2]
+            mcolor = (red, green, blue)
+            if mcolor not in rgbArr:
+                # print(mcolor)
+                clrset.add(mcolor)
+                count += 1
+                # r = 0
+                # g= 0
+                # b = 0
+                # mcolor = (r,g,b)
+                if mcolor[0] > 125 and mcolor[1] < 125 and mcolor[2] < 125:
+                    r = 255
+                    g = 0
+                    b = 0
+                    mcolor = (r, g, b)
+                elif mcolor[0] < 125 and mcolor[1] > 125 and mcolor[2] < 125:
+                    r = 0
+                    g = 255
+                    b = 0
+                    mcolor = (r, g, b)
+                elif mcolor[0] < 125 and mcolor[1] < 125 and mcolor[2] > 125:
+                    r = 0
+                    g = 0
+                    b = 255
+                    mcolor = (r, g, b)
+                elif mcolor[0] > 125 and mcolor[1] < 125 and mcolor[2] > 125:
+                    r = 255
+                    g = 0
+                    b = 255
+                    mcolor = (r, g, b)
+                elif mcolor[0] > 200 and mcolor[1] > 200 and mcolor[2] > 200:
+                    r = 255
+                    g = 255
+                    b = 255
+                    mcolor = (r, g, b)
+                else:
+                    r = 255
+                    g = 255
+                    b = 255
+                    mcolor = (r, g, b)
+
+            newpix[i, j] = (int(mcolor[0]), int(mcolor[1]), int(mcolor[2]))
+
+    save_image(newImg, dst+filename)
 
 
+# print(count)
+# print(clrset)
 
-img = open_image('000286.png')
-w, h = img.size
-count = 0
-for i in range(w):
-    for j in range(h):
-        mpixel = get_pixel(img, i , j)
-        red = mpixel[0]
-        green = mpixel[1]
-        blue = mpixel[2]
-        filem.write(str(red) + ' ' + str(green)+ ' ' + str(blue)+"\n")
-        mcolor = (red,green,blue)
-        if mcolor not in rgbArr:
-            # print(mcolor)
-            clrset.add(mcolor)
-            count +=1
-
-print(count)
-print(clrset)
-
-filem.close()
