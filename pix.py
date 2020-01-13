@@ -90,6 +90,7 @@ for filename in os.listdir(src):
 
     save_image(newImg, dst+filename)
 
+# color distance
 
 # print(count)
 # print(clrset)
