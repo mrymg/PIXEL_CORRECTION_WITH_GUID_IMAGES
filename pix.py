@@ -47,8 +47,8 @@ rgbArr = [(255, 0, 0),
           (255, 255, 255),
           (255, 0, 255)]
 clrset = set()
-src = "C:\\Users\\ymgoz\\Desktop\\assigned-to-yunus2\\masksc\\"
-dst = "C:\\Users\\ymgoz\\Desktop\\assigned-to-yunus2\\corrected\\"
+src = "SOURCE PATH FOR IMAGES"
+dst = "DESTINATION PATH TO SAVE PIXEL CORRECTED IMAGES"
 allcount = 0
 for filename in os.listdir(src):
     img = open_image(src + filename)
@@ -76,5 +76,5 @@ for filename in os.listdir(src):
 
     save_image(newImg, dst + filename)
 
-# print(allcount) 
-# print(clrset)
+# print(allcount) #TO COUNT ALL CORRECTED PIXELS
+# print(clrset) #A SET FOR DIFFERENT COLORS FROM OUR COLOR MAP
